@@ -13,6 +13,13 @@ import Profile from './screens/Profile';
 
 
 const Stack = createStackNavigator();
+const myOptionsHome = {
+  title:"My motherfucker Home",
+  headerTintColor: "white",
+  headerStyle:{
+    backgroundColor:"#006aff"
+  }
+}
 
 function App() {
   return (
@@ -20,10 +27,22 @@ function App() {
       {/* <Home/> */}
       {/* <CreateEmployee/> */}
       <Stack.Navigator>
-        <Stack.Screen name="Home" component={Home} />
-        <Stack.Screen name="CreateEmployee" component={CreateEmployee} />
-        <Stack.Screen name="Profile" component={Profile} />
-      </Stack.Navigator>
+        <Stack.Screen 
+        name="Home" 
+        component={Home} 
+        options={myOptionsHome}
+        />
+        <Stack.Screen
+        name="CreateEmployee" 
+        component={CreateEmployee}
+        options={{...myOptionsHome,title:"Create employee"}}
+        />
+        <Stack.Screen 
+        name="Profile" 
+        component={Profile} 
+        options={{...myOptionsHome,title:"Profile employee"}}
+        />
+      </Stack.Navigator>  
       {/* <Profile/> */}
     </View>
 

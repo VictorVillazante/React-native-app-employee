@@ -3,14 +3,22 @@ import { Text,StyleSheet,Image,View,FlatList} from "react-native";
 import { Card, FAB } from "react-native-paper";
 function Home(props) {
   const list=[
-    {"id":1,"nombre":"Juan","work":"dev-front"},
-    {"id":2,"nombre":"Pedro","work":"dev-back"},
-    {"id":3,"nombre":"Jose","work":"QA"},
-    {"id":4,"nombre":"Marimar","work":"BBDD"},
-    {"id":5,"nombre":"Juan","work":"dev-front"},
-    {"id":6,"nombre":"Pedro","work":"dev-back"},
-    {"id":7,"nombre":"Jose","work":"QA"},
-    {"id":8,"nombre":"Marimar","work":"BBDD"},
+    // {"id":1,"nombre":"Juan","work":"dev-front"},
+    // {"id":2,"nombre":"Pedro","work":"dev-back"},
+    // {"id":3,"nombre":"Jose","work":"QA"},
+    // {"id":4,"nombre":"Marimar","work":"BBDD"},
+    // {"id":5,"nombre":"Juan","work":"dev-front"},
+    // {"id":6,"nombre":"Pedro","work":"dev-back"},
+    // {"id":7,"nombre":"Jose","work":"QA"},
+    // {"id":8,"nombre":"Marimar","work":"BBDD"},
+    {id:1,nombre:"Meliodas",email:"Meliodas@email.com",salary:"2M Sus",phone:12345,position:"anime-person",picture:"https://static.wikia.nocookie.net/nanatsu-no-taizai/images/a/af/Meliodas_Anime.png/revision/latest/scale-to-width-down/350?cb=20150719214811&path-prefix=es"},
+    {id:2,nombre:"Elizabeth",email:"Elizabeth@email.com",salary:"2M Sus",phone:12345,position:"anime-person",picture:"https://static.wikia.nocookie.net/nanatsu-no-taizai/images/7/7e/Elizabeth_Anime.png/revision/latest/scale-to-width-down/350?cb=20160110155917&path-prefix=es"},
+    {id:3,nombre:"Escanor",email:"Escanor@email.com",salary:"2M Sus",phone:12345,position:"anime-person",picture:"https://static.wikia.nocookie.net/nanatsu-no-taizai/images/e/e1/Escanor_con_Rhitta_de_dia.png/revision/latest/scale-to-width-down/350?cb=20200307044617&path-prefix=es"},
+    {id:4,nombre:"Ban",email:"Ban@email.com",salary:"2M Sus",phone:12345,position:"anime-person",picture:"https://static.wikia.nocookie.net/nanatsu-no-taizai/images/e/e0/Ban_Anime.png/revision/latest/scale-to-width-down/350?cb=20150719220555&path-prefix=es"},
+    {id:5,nombre:"Diane",email:"Diane@email.com",salary:"2M Sus",phone:12345,position:"anime-person",picture:"https://static.wikia.nocookie.net/nanatsu-no-taizai/images/3/35/Diane_Anime.png/revision/latest?cb=20150719213859&path-prefix=es"},
+    {id:6,nombre:"Gowther",email:"Gowther@email.com",salary:"2M Sus",phone:12345,position:"anime-person",picture:"https://static.wikia.nocookie.net/nanatsu-no-taizai/images/0/0b/Gowther_%28anime%29.png/revision/latest/scale-to-width-down/180?cb=20160109065758&path-prefix=es"},
+    {id:7,nombre:"Merlin",email:"Merlin@email.com",salary:"2M Sus",phone:12345,position:"anime-person",picture:"https://static.wikia.nocookie.net/nanatsu-no-taizai/images/2/29/Merl%C3%ADn_C.png/revision/latest/scale-to-width-down/120?cb=20150301210126&path-prefix=es"},
+    {id:8,nombre:"King",email:"King@email.com",salary:"2M Sus",phone:12345,position:"anime-person",picture:"https://static.wikia.nocookie.net/nanatsu-no-taizai/images/7/7c/King_C.png/revision/latest/scale-to-width-down/120?cb=20150120034121&path-prefix=es"}
   ]
   // const renderList=list.map((el)=>{
   //   return (
@@ -31,14 +39,17 @@ function Home(props) {
     let value=0;
     const renderList=((el)=>{
     return (
-      <Card style={styles.mycard} key={el.id}>
+      <Card 
+        style={styles.mycard} 
+        key={el.id}
+        onPress={()=>props.navigation.navigate("Profile",{"item":el})}>
           <View style={styles.cardView}>
             <Image style={{width:80,height:80,borderRadius:50/2}}
-            source={{uri:"https://i.pinimg.com/736x/b0/0e/35/b00e35bd06e1db3cd0d1a3ad84815e8e--img-meme-saitama-one-punch-man.jpg"}}
+            source={{uri:el.picture}}
             />
             <View style={{padding:10}}>
               <Text style={styles.text}>{el.nombre}</Text>
-              <Text style={styles.text}>{el.work}</Text>
+              <Text style={styles.text}>{el.position}</Text>
             </View>
 
           </View>

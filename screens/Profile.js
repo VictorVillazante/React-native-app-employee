@@ -4,12 +4,15 @@ import { StyleSheet,View,Image, Text,Linking,Platform} from "react-native";
 import { Button, Card, Title } from "react-native-paper";
 import { MaterialIcons,Entypo } from '@expo/vector-icons'; 
 
-const Profile=()=>{
+
+const Profile=(props)=>{
+    const {id,nombre,email,salary,phone,position,picture}=props.route.params.item;
+
     const openDialog=()=>{
         if(Platform.OS=="android"){
-            Linking.openURL("tel:12345")
+            Linking.openURL("tel:"+phone)
         }else{
-            Linking.openURL("telprompt:12345")
+            Linking.openURL("telprompt:"+phone)
         }
     }
     return (
@@ -21,23 +24,23 @@ const Profile=()=>{
             <View style={{alignItems:"center"}}> 
                 <Image
                     style={{borderRadius:30,width:100,height:100,marginTop:-40}}
-                    source={{uri:"https://concepto.de/wp-content/uploads/2018/08/persona-e1533759204552.jpg"}}
+                    source={{uri:picture}}
                 />
             </View> 
             
             <View style={{alignItems:"center"}}> 
                 <Title> 
-                    Juan Paredes
+                    {nombre}
                 </Title>
                 <Text> 
-                    Juan Paredes
+                    {position}
                 </Text>    
             </View> 
-            <Card style={styles.card_style} onPress={()=>{Linking.openURL("mailto:abc@abc.com")}}> 
+            <Card style={styles.card_style} onPress={()=>{Linking.openURL("mailto:"+email)}}> 
                 <View style={styles.flex_view}>  
                     <MaterialIcons name="email" size={24} color="black" />
                     <Text style={styles.text_style}> 
-                        Juan Paredes
+                        {email}
                     </Text>  
                 </View>    
             </Card>
@@ -45,7 +48,7 @@ const Profile=()=>{
                 <View style={styles.flex_view}> 
                     <Entypo name="phone" size={24} color="black" />
                     <Text style={styles.text_style}> 
-                        123456
+                        {phone}
                     </Text>
                 </View>    
             </Card>
@@ -53,7 +56,7 @@ const Profile=()=>{
                 <View style={styles.flex_view}> 
                     <MaterialIcons name="attach-money" size={24} color="black" />
                     <Text style={styles.text_style}> 
-                        8 LPA
+                        {salary}
                     </Text>   
                 </View>    
             </Card>

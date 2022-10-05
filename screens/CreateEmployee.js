@@ -1,7 +1,11 @@
 import React,{useState} from "react";
-import { StyleSheet,View} from "react-native";
-import { Modal, TextInput ,Button} from 'react-native-paper';
+import { Alert, StyleSheet,View} from "react-native";
+import { Modal, TextInput ,Button, DataTable} from 'react-native-paper';
 import { Portal, Text, Provider } from 'react-native-paper';
+//Image picker
+import * as ImagePicker from 'expo-image-picker';
+// import Constants from 'expo-constants';
+import * as  Permissions from "expo-permissions";
 const CreateEmployee=()=>{
     const [Name,setName]=useState("")
     const [phone,setPhone]=useState("")
@@ -10,7 +14,64 @@ const CreateEmployee=()=>{
     const [picture,setPicture]=useState("")
     const [modal,setModal]=useState(false)
     const [visible, setVisible] = React.useState(false);
-
+    const pickFromGallery=async()=>{
+        const {granted}=await Permissions.askAsync(Permissions.CAMERA_ROLL)
+        if(granted){
+            let data=await ImagePicker.launchImageLibraryAsync({
+                mediaTypes:ImagePicker.MediaTypeOptions.Images,
+                allowsEditing:true,
+                aspect:[1,1],
+                quality:0.5
+            })
+            if(!data.cancelled){
+                let newFile={
+                    uri:data.uri,
+                    type:`test/${data.uri.split(".")[1]}`,
+                    name: `test.${data.uri.split(".")[1]}`
+                }
+                handleUpload(newFile);
+            }        }else{
+            Alert.alert("You don't give me permission for open your gallery");
+        }
+    }
+    const pickFromCamera=async()=>{
+        const {granted}=await Permissions.askAsync(Permissions.CAMERA)
+        if(granted){
+            let data=await ImagePicker.launchCameraAsync({
+                mediaTypes:ImagePicker.MediaTypeOptions.Images,
+                allowsEditing:true,
+                aspect:[1,1],
+                quality:0.5
+            })
+            if(!data.cancelled){
+                let newFile={
+                    uri:data.uri,
+                    type:`test/${data.uri.split(".")[1]}`,
+                    name: `test.${data.uri.split(".")[1]}`
+                }
+                handleUpload(newFile);
+            }
+        }else{
+            Alert.alert("You don't give me permission for open your gallery");
+        }
+    }
+    const handleUpload=(image)=>{
+        console.log(image)
+        const data=new FormData()
+        data.append('file',image);
+        data.append('upload_preset','employeeApp');
+        data.append('cloud_name','dppsjuufc');
+        fetch("https://api.cloudinary.com/v1_1/dppsjuufc/image/upload/",{
+            method:"post",
+            body:data
+        })
+        .then(res=>res.json())
+        .then((data)=>{
+            console.log(data);
+            setPicture(data.uri);
+            setModal(false);    
+        })
+    };
   const showModal = () => setVisible(true);
   const hideModal = () => setVisible(false);
   const containerStyle = {backgroundColor: 'white', padding: 20, height:500};
@@ -45,7 +106,9 @@ const CreateEmployee=()=>{
                 theme={theme}
                 onChangeText={text => setSalary(text)}
             />
-            <Button style={styles.buttons} icon="upload" mode="contained" onPress={() => setModal(true)} theme={theme}>
+            <Button style={styles.buttons} mode="contained" onPress={() => setModal(true)} theme={theme}
+                icon={(picture=="")?"upload":"check"}
+            >
                 Upload
             </Button>
             <Button style={styles.buttons} icon="content-save" mode="contained" onPress={() => console.log("saved")} theme={theme}>
@@ -62,10 +125,10 @@ const CreateEmployee=()=>{
             >
                 <View style={styles.styleView}>
                     <View style={styles.styleViewButton}>
-                        <Button icon="camera" mode="contained" onPress={() => console.log("Take a picture with your camera")} theme={theme}>
+                        <Button icon="camera" mode="contained" onPress={() => pickFromCamera()} theme={theme}>
                             Camera                    
                         </Button>
-                        <Button  icon="image-area" mode="contained" onPress={() => console.log("Select picture of galery")} theme={theme}>
+                        <Button  icon="image-area" mode="contained" onPress={() => pickFromGallery()} theme={theme}>
                             Galery                    
                         </Button>
                     </View>
