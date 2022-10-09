@@ -1,0 +1,14 @@
+POST http://localhost:3000/send
+Content-Type: application/json
+
+{
+    "name":"Señor cosquillas",
+    "position":"CIO",
+    "salary":"5000.5",
+    "picture":"",
+    "email":"email@email.com",
+    "phone":"84752940-4"
+}
+###
+
+GET http://localhost:3000/
