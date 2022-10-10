@@ -12,3 +12,19 @@ Content-Type: application/json
 ###
 
 GET http://localhost:3000/
+
+###
+DELETE http://localhost:3000/delete/633f510ac488f0f21cbe2b4b
+
+###
+PUT http://localhost:3000/update/633f50f6bda57c31f35420d4
+Content-Type: application/json
+
+{
+    "name":"El rompe catres 3000*2",
+    "position":"CIO",
+    "salary":"5000.5",
+    "picture":"",
+    "email":"email@email.com",
+    "phone":"84752940-4"
+}

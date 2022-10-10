@@ -32,15 +32,46 @@ app.post("/send",(req,res)=>{
         "phone":req.body.phone
     })
     employee.save().then((data)=>{
-        console.log(data)
-        res.send("success")
+        res.send(data)
     }).catch((err)=>{
         res.send("Error:"+err)
     })
 })
 
 app.get("/",(req,res)=>{
-    res.send("Hola de nuevo victor este es un servidor en node js")
+    Employee.find({})
+    .then((data)=>{
+        res.send(data)
+    }).catch((err)=>{
+        res.send("Error:"+err)
+    });
+})
+app.delete("/delete/:id",(req,res,next)=>{
+    var id=req.params.id;
+    Employee.findByIdAndRemove(id)
+    .then(data=>{
+        res.send(data);
+    }).catch((err)=>{
+        res.send("Error:"+err)
+    });
+    
+    res.send("deleted "+id);
+})
+
+app.put("/update/:id",(req,res,next)=>{
+    var id=req.params.id;
+    Employee.findByIdAndUpdate(id,{
+        name:req.body.name,
+        position:req.body.position,
+        salary:req.body.salary,
+        picture:req.body.picture,
+        email:req.body.email,
+        phone:req.body.phone
+    }).then((data)=>{
+        res.send(data)
+    }).catch((err)=>{
+        res.send("Error:"+err)
+    })
 })
 app.listen(3000,()=>{
     console.log('Server running, I knew nodejs but Its for remember')
