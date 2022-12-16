@@ -1,19 +1,92 @@
 import React,{useState} from "react";
-import { Alert, StyleSheet,View} from "react-native";
+import { Alert, StyleSheet,View,KeyboardAvoidingView} from "react-native";
 import { Modal, TextInput ,Button, DataTable} from 'react-native-paper';
 import { Portal, Text, Provider } from 'react-native-paper';
 //Image picker
 import * as ImagePicker from 'expo-image-picker';
 // import Constants from 'expo-constants';
 import * as  Permissions from "expo-permissions";
-const CreateEmployee=()=>{
-    const [Name,setName]=useState("")
-    const [phone,setPhone]=useState("")
-    const [email,setEmail]=useState("")
-    const [salary,setSalary]=useState("")
-    const [picture,setPicture]=useState("")
+const CreateEmployee=({navigation,route})=>{
+    const getDetails=(type)=>{
+        if(route.params){
+            switch(type){
+                case "name":
+                    console.log(route.params);
+                    return route.params.name;
+                case "phone":
+                    return route.params.phone;
+                case "email":
+                    return route.params.email;
+                case "salary":
+                    return route.params.salary;
+                case "picture":
+                    return route.params.picture;
+                case "position":
+                    return route.params.position;  
+            }
+        }else{
+            return "";
+        }
+    }
+    
+    const [name,setName]=useState(getDetails("name"))
+    const [phone,setPhone]=useState(getDetails("phone"))
+    const [email,setEmail]=useState(getDetails("email"))
+    const [salary,setSalary]=useState(getDetails("salary"))
+    const [picture,setPicture]=useState(getDetails("picture"))
+    const [position,setPosition]=useState(getDetails("position"))
     const [modal,setModal]=useState(false)
     const [visible, setVisible] = React.useState(false);
+
+    const submitData=()=>{
+        fetch(
+            "http://192.168.1.10:3000/send",
+            {
+                method:"post",
+                headers:{
+                    "Content-Type":"application/json"
+                },
+                body:JSON.stringify({
+                    name,
+                    phone,
+                    email,
+                    salary,
+                    picture,
+                    position,
+                })
+            }
+        ).then(res=>res.json())
+        .then(data=>{
+            console.log(data);
+            Alert.alert(`This data ${data.name} saved successfully`);
+            navigation.navigate("Home");
+        })
+    }
+    const uploadData=()=>{
+        fetch(
+            "http://192.168.1.10:3000/update/"+route.params._id,
+            {
+                method:"put",
+                headers:{
+                    "Content-Type":"application/json"
+                },
+                body:JSON.stringify({
+                    name,
+                    phone,
+                    email,
+                    salary,
+                    picture,
+                    position,
+                })
+            }
+        ).then(res=>res.json())
+        .then(data=>{
+            console.log(data);
+            Alert.alert(`This data ${data.name} updated successfully`);
+            navigation.navigate("Home");
+        })
+    }
+
     const pickFromGallery=async()=>{
         const {granted}=await Permissions.askAsync(Permissions.CAMERA_ROLL)
         if(granted){
@@ -68,7 +141,7 @@ const CreateEmployee=()=>{
         .then(res=>res.json())
         .then((data)=>{
             console.log(data);
-            setPicture(data.uri);
+            setPicture(data.url);
             setModal(false);    
         })
     };
@@ -76,10 +149,11 @@ const CreateEmployee=()=>{
   const hideModal = () => setVisible(false);
   const containerStyle = {backgroundColor: 'white', padding: 20, height:500};
     return(
-        <Provider style={styles.root}> 
+        <KeyboardAvoidingView style={styles.root}>
+        <Provider > 
             <TextInput
                 label="Name"
-                value={Name}
+                value={name}
                 mode="outlined"
                 theme={theme}
                 onChangeText={text => setName(text)}
@@ -106,14 +180,27 @@ const CreateEmployee=()=>{
                 theme={theme}
                 onChangeText={text => setSalary(text)}
             />
+            <TextInput
+                label="Position"
+                value={position}
+                mode="outlined"
+                theme={theme}
+                onChangeText={text => setPosition(text)}
+            />
             <Button style={styles.buttons} mode="contained" onPress={() => setModal(true)} theme={theme}
                 icon={(picture=="")?"upload":"check"}
             >
+                Push image
+            </Button>
+            {route.params==""?
+                <Button style={styles.buttons} icon="content-save" mode="contained" onPress={() => submitData()} theme={theme}>
+                Save
+            </Button>:
+                <Button style={styles.buttons} icon="content-save" mode="contained" onPress={() => uploadData()} theme={theme}>
                 Upload
             </Button>
-            <Button style={styles.buttons} icon="content-save" mode="contained" onPress={() => console.log("saved")} theme={theme}>
-                Save
-            </Button>
+            }
+            
             <Portal>
             <Modal
                 animationType="slide"
@@ -141,6 +228,10 @@ const CreateEmployee=()=>{
             </Modal>
             </Portal>
         </Provider>
+        
+        </KeyboardAvoidingView>
+
+
     //     <Provider>
     //     <Portal>
     //       <Modal visible={visible} onDismiss={hideModal} contentContainerStyle={containerStyle}>

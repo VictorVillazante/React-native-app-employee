@@ -61,6 +61,8 @@ const styles = StyleSheet.create({
   container: {
     margin: Contants.statusBarHeight,
     flex: 1,
+    marginHorizontal:0,
+    height:500
     // alignItems: 'center',
     // justifyContent: 'center',
     // backgroundColor: "#ff00ff",

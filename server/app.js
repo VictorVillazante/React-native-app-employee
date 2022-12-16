@@ -7,7 +7,7 @@ require('./Employee')
 app.use(bodyParser.json());
 
 const Employee = mongoose.model("employee")
-const mongoUri="mongodb+srv://bitius:8LvBgzY6dF8tSgVx@cluster0.jzri4l7.mongodb.net/?retryWrites=true&w=majority"
+const mongoUri="mongodb+srv://bitius:bitius@cluster0.jzri4l7.mongodb.net/?retryWrites=true&w=majority"
 
 
 mongoose.connect(mongoUri,{
@@ -54,8 +54,6 @@ app.delete("/delete/:id",(req,res,next)=>{
     }).catch((err)=>{
         res.send("Error:"+err)
     });
-    
-    res.send("deleted "+id);
 })
 
 app.put("/update/:id",(req,res,next)=>{

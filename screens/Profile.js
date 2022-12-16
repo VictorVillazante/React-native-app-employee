@@ -1,12 +1,29 @@
 import { LinearGradient } from "expo-linear-gradient";
 import React,{useState} from "react";
-import { StyleSheet,View,Image, Text,Linking,Platform} from "react-native";
+import { StyleSheet,View,Image, Text,Linking,Platform, Alert} from "react-native";
 import { Button, Card, Title } from "react-native-paper";
 import { MaterialIcons,Entypo } from '@expo/vector-icons'; 
 
 
 const Profile=(props)=>{
-    const {id,nombre,email,salary,phone,position,picture}=props.route.params.item;
+
+    const {_id,name,email,salary,phone,position,picture}=props.route.params.item;
+
+
+    const deleteEmployee=(id)=>{
+        let dir="http://192.168.1.10:3000/delete/"+_id;
+        console.log(dir);
+        fetch(
+          dir,
+          {
+            method:"delete"
+          }
+        ).then(res=>res.json())
+        .then(deletedEm=>{
+            Alert.alert("Deleted "+deletedEm.name)
+            props.navigation.navigate("Home")
+        })
+      }
 
     const openDialog=()=>{
         if(Platform.OS=="android"){
@@ -30,7 +47,7 @@ const Profile=(props)=>{
             
             <View style={{alignItems:"center"}}> 
                 <Title> 
-                    {nombre}
+                    {name}
                 </Title>
                 <Text> 
                     {position}
@@ -61,10 +78,10 @@ const Profile=(props)=>{
                 </View>    
             </Card>
             <View style={{flexDirection:"row",justifyContent:"space-around",padding:5}}> 
-                <Button theme={theme} icon="account-edit" mode="contained" onPress={() => console.log('Pressed')}>
+                <Button theme={theme} icon="account-edit" mode="contained" onPress={() => props.navigation.navigate("CreateEmployee",{_id,name,email,salary,phone,position,picture})}>
                     Edit
                 </Button>
-                <Button theme={theme} icon="delete" mode="contained" onPress={() => console.log('Pressed')}>
+                <Button theme={theme} icon="delete" mode="contained" onPress={() => deleteEmployee(_id)}>
                     Delete
                 </Button>
             </View> 
