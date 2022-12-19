@@ -36,6 +36,8 @@ const CreateEmployee=({navigation,route})=>{
     const [picture,setPicture]=useState(getDetails("picture"))
     const [position,setPosition]=useState(getDetails("position"))
     const [modal,setModal]=useState(false)
+    const [kav,setKAV]=useState(false)
+
     const [visible, setVisible] = React.useState(false);
 
     const submitData=()=>{
@@ -149,13 +151,15 @@ const CreateEmployee=({navigation,route})=>{
   const hideModal = () => setVisible(false);
   const containerStyle = {backgroundColor: 'white', padding: 20, height:500};
     return(
-        <KeyboardAvoidingView style={styles.root}>
+        <KeyboardAvoidingView style={styles.root} enabled={kav}>
         <Provider > 
             <TextInput
                 label="Name"
                 value={name}
                 mode="outlined"
                 theme={theme}
+                onFocus={()=> setKAV(false)}
+
                 onChangeText={text => setName(text)}
             />
             <TextInput
@@ -163,6 +167,8 @@ const CreateEmployee=({navigation,route})=>{
                 value={email}
                 mode="outlined"
                 theme={theme}
+                onFocus={()=> setKAV(false)}
+
                 onChangeText={text => setEmail(text)}
             />
             <TextInput
@@ -171,6 +177,7 @@ const CreateEmployee=({navigation,route})=>{
                 mode="outlined"
                 theme={theme}
                 keyboardType="number-pad"
+                onFocus={()=> setKAV(false)}
                 onChangeText={text => setPhone(text)}
             />
             <TextInput
@@ -178,6 +185,7 @@ const CreateEmployee=({navigation,route})=>{
                 value={salary}
                 mode="outlined"
                 theme={theme}
+                onFocus={()=> setKAV(true)}
                 onChangeText={text => setSalary(text)}
             />
             <TextInput
@@ -185,6 +193,7 @@ const CreateEmployee=({navigation,route})=>{
                 value={position}
                 mode="outlined"
                 theme={theme}
+                onFocus={()=> setKAV(true)}
                 onChangeText={text => setPosition(text)}
             />
             <Button style={styles.buttons} mode="contained" onPress={() => setModal(true)} theme={theme}
