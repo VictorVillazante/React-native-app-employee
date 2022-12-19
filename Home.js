@@ -1,19 +1,27 @@
 import React,{useEffect,useState} from "react";
 import { Text,StyleSheet,Image,View,FlatList, Alert} from "react-native";
 import { ActivityIndicator, Card, FAB } from "react-native-paper";
+import {useSelector,useDispatch} from 'react-redux';
+
 function Home(props) {
-  const [data,setData]=useState([]);
-  const [loading,setLoading]=useState(true);
+  // const [data,setData]=useState([]);
+  // const [loading,setLoading]=useState(true);
   
-  
+  const dispatch = useDispatch();
+  const {data,loading}=useSelector((state)=>{
+    return state
+  })
 
   const refreshData=()=>{
     fetch(
       "http://192.168.1.10:3000/"
     ).then(res=>res.json())
     .then(result=>{
-        setData(result)
-        setLoading(false)
+        // setData(result)
+        // setLoading(false)
+        dispatch({type:'ADD_DATA',payload:result});
+        dispatch({type:'SET_LOADING',payload:false});
+
     }).catch((err)=>{
       Alert.alert("Error "+err);
     })

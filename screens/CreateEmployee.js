@@ -201,13 +201,15 @@ const CreateEmployee=({navigation,route})=>{
             >
                 Push image
             </Button>
-            {route.params==""?
-                <Button style={styles.buttons} icon="content-save" mode="contained" onPress={() => submitData()} theme={theme}>
-                Save
-            </Button>:
+            {route.params?
                 <Button style={styles.buttons} icon="content-save" mode="contained" onPress={() => uploadData()} theme={theme}>
                 Upload
             </Button>
+                :
+                <Button style={styles.buttons} icon="content-save" mode="contained" onPress={() => submitData()} theme={theme}>
+                Save
+            </Button>
+                
             }
             
             <Portal>
